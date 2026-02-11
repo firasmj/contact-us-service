@@ -1,0 +1,9 @@
+# Local-only profile settings.
+# Copy values into `application-local.properties` (ignored by git) and adjust as needed.
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/contactus
+spring.datasource.username=postgres
+spring.datasource.password=change-me
+
+spring.jpa.hibernate.ddl-auto=validate
+spring.flyway.enabled=true
