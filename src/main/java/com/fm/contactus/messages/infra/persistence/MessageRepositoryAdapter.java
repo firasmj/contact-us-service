@@ -1,5 +1,6 @@
 package com.fm.contactus.messages.infra.persistence;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -34,5 +35,13 @@ public class MessageRepositoryAdapter implements MessageRepositoryPort {
     public Page<Message> findAll(Pageable pageable) {
         return messageJpaRepository.findAll(pageable)
             .map(MessagePersistenceMapper::toDomain);
+    }
+
+    @Override
+    public List<Message> findByProjectId(Long projectId) {
+        return messageJpaRepository.findByProjectId(projectId)
+            .stream()
+            .map(MessagePersistenceMapper::toDomain)
+            .toList();
     }
 }

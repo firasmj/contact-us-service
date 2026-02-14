@@ -1,5 +1,6 @@
 package com.fm.contactus.messages.application.port;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.fm.contactus.messages.domain.Message;
@@ -10,4 +11,5 @@ public interface MessageRepositoryPort {
     Message save(Message message);
     Optional<Message> findById(Long id);
     Page<Message> findAll(Pageable pageable);
+    List<Message> findByProjectId(Long projectId);
 }

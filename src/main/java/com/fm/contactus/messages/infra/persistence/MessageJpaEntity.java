@@ -131,4 +131,5 @@ public class MessageJpaEntity {
     void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
+    
 }
