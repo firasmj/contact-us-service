@@ -22,6 +22,11 @@ public class TokenAuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+
+        if (request.getMethod().equalsIgnoreCase("OPTIONS")) {
+            return true; // Skip token validation for preflight requests
+        }
+
         String tokenHeader = request.getHeader("X-Project-Token");
         ProjectToken token = tokenValidationService.resolveActiveToken(tokenHeader);
         TokenAuthContext authContext = new TokenAuthContext(token.getId(), token.getProjectId(), token.getTokenEncoded());
