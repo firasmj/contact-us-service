@@ -7,3 +7,6 @@ spring.datasource.password=change-me
 
 spring.jpa.hibernate.ddl-auto=validate
 spring.flyway.enabled=true
+
+contactus.cors.allowed-origins=http://localhost:3000
+contactus.admin.api-key=change-me-admin-key

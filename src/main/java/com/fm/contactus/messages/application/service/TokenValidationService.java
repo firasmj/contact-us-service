@@ -22,8 +22,9 @@ public class TokenValidationService {
         if (encodedToken == null || encodedToken.isBlank()) {
             throw new MissingTokenException("Invalid token: Token is missing from the request");
         }
+        String normalizedToken = encodedToken.trim();
 
-        ProjectToken token = tokenRepository.findTokenByEncodedValue(encodedToken)
+        ProjectToken token = tokenRepository.findTokenByEncodedValue(normalizedToken)
                 .orElseThrow(() -> new InvalidTokenException("Provided token is invalid or does not exist"));
 
         if (!token.isValid(LocalDateTime.now())) {

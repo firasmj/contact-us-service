@@ -9,7 +9,7 @@ import com.fm.contactus.messages.domain.ProjectToken;
 
 @Repository
 public class TokenRepositoryAdapter implements TokenRepositoryPort {
-    
+
     private final TokenJpaRepository tokenJpaRepository;
 
     public TokenRepositoryAdapter(TokenJpaRepository tokenJpaRepository) {
@@ -18,11 +18,18 @@ public class TokenRepositoryAdapter implements TokenRepositoryPort {
 
     @Override
     public Optional<ProjectToken> findTokenByEncodedValue(String encodedValue) {
-        Optional<TokenJpaEntity> tokenEntity = tokenJpaRepository.findByTokenEncoded(encodedValue);
-        if (tokenEntity.isPresent()) {
-            return Optional.of(TokenPersistenceMapper.toDomain(tokenEntity.get()));
-        } else {
-            return Optional.empty();
-        }
+        return tokenJpaRepository.findByTokenEncoded(encodedValue)
+            .map(TokenPersistenceMapper::toDomain);
+    }
+
+    @Override
+    public boolean existsByEncodedValue(String encodedValue) {
+        return tokenJpaRepository.existsByTokenEncoded(encodedValue);
+    }
+
+    @Override
+    public ProjectToken save(ProjectToken token) {
+        TokenJpaEntity savedEntity = tokenJpaRepository.save(TokenPersistenceMapper.toEntity(token));
+        return TokenPersistenceMapper.toDomain(savedEntity);
     }
 }

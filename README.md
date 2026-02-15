@@ -29,6 +29,10 @@ The token must:
 - have `status = ACTIVE`
 - have `expires_at` in the future
 
+Requests to `/api/tokens/**` require:
+
+- Header: `X-Admin-Key`
+
 ## Endpoints
 
 ### `POST /api/messages`
@@ -68,6 +72,39 @@ curl http://localhost:8080/api/messages \
   -H "X-Project-Token: dev-token-123"
 ```
 
+### `POST /api/tokens`
+
+Creates a token for a project.
+
+```bash
+curl -X POST http://localhost:8080/api/tokens \
+  -H "Content-Type: application/json" \
+  -H "X-Admin-Key: change-me-admin-key" \
+  -d '{"projectId":1,"expiresInDays":365}'
+```
+
+### `POST /api/tokens/rotate`
+
+Revokes an existing token and issues a new one for the same project.
+
+```bash
+curl -X POST http://localhost:8080/api/tokens/rotate \
+  -H "Content-Type: application/json" \
+  -H "X-Admin-Key: change-me-admin-key" \
+  -d '{"tokenEncoded":"dev-token-123","expiresInDays":365}'
+```
+
+### `POST /api/tokens/revoke`
+
+Revokes a token.
+
+```bash
+curl -X POST http://localhost:8080/api/tokens/revoke \
+  -H "Content-Type: application/json" \
+  -H "X-Admin-Key: change-me-admin-key" \
+  -d '{"tokenEncoded":"dev-token-123"}'
+```
+
 ## Local Setup
 
 1. Create PostgreSQL database (example: `contactus`).
@@ -98,6 +135,15 @@ CORS allowed origins:
 - `contactus.cors.allowed-origins`
 - supports comma-separated values, for example:
   - `http://localhost:3000,http://localhost:5173`
+
+Admin key (for token management endpoints):
+
+- `ADMIN_API_KEY`
+
+Abuse protection settings:
+
+- `contactus.abuse.max-requests`
+- `contactus.abuse.window-seconds`
 
 ## Quick Token Seed (Dev)
 

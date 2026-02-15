@@ -9,16 +9,25 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    private final AdminKeyInterceptor adminKeyInterceptor;
     private final TokenAuthInterceptor tokenAuthInterceptor;
     private final String allowedOrigins;
 
-    public WebConfig(TokenAuthInterceptor tokenAuthInterceptor, @Value("${contactus.cors.allowed-origins}") String allowedOrigins) {
+    public WebConfig(
+        AdminKeyInterceptor adminKeyInterceptor,
+        TokenAuthInterceptor tokenAuthInterceptor,
+        @Value("${contactus.cors.allowed-origins:http://localhost:3000}") String allowedOrigins
+    ) {
+        this.adminKeyInterceptor = adminKeyInterceptor;
         this.tokenAuthInterceptor = tokenAuthInterceptor;
         this.allowedOrigins = allowedOrigins;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(adminKeyInterceptor)
+                .addPathPatterns("/api/tokens/**");
+
         registry.addInterceptor(tokenAuthInterceptor)
                 .addPathPatterns("/api/messages/**");
     }
@@ -29,6 +38,11 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins(allowedOrigins.split(","))
                 .allowedMethods("GET", "POST", "OPTIONS")
                 .allowedHeaders("X-Project-Token", "Content-Type");
+
+        registry.addMapping("/api/tokens/**")
+                .allowedOrigins(allowedOrigins.split(","))
+                .allowedMethods("POST", "OPTIONS")
+                .allowedHeaders("X-Admin-Key", "Content-Type");
     }
     
 }

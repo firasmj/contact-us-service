@@ -106,6 +106,19 @@ public class Message {
     }
 
     public static Message createNew(Long projectId, String message, String subject, String name, String email, String phone, String type) {
+        return createNew(projectId, message, subject, name, email, phone, type, null);
+    }
+
+    public static Message createNew(
+        Long projectId,
+        String message,
+        String subject,
+        String name,
+        String email,
+        String phone,
+        String type,
+        String ipAddress
+    ) {
         if (message == null || message.isBlank()) {
             throw new IllegalArgumentException("Message is required");
         }
@@ -118,7 +131,7 @@ public class Message {
         if (email == null || email.isBlank()) {
             throw new IllegalArgumentException("Email is required");
         }
-        return new Message(null, projectId, message, subject, name, email, phone, type, MessageStatus.NEW, null, null, null);
+        return new Message(null, projectId, message, subject, name, email, phone, type, MessageStatus.NEW, null, null, ipAddress);
     }
 
 }

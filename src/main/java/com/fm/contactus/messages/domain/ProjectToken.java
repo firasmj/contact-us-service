@@ -18,6 +18,27 @@ public class ProjectToken {
         return status == Status.ACTIVE && now.isBefore(expiresAt);
     }
 
+    public static ProjectToken issue(Long projectId, String tokenEncoded, LocalDateTime expiresAt) {
+        if (projectId == null) {
+            throw new IllegalArgumentException("Project ID is required");
+        }
+        if (tokenEncoded == null || tokenEncoded.isBlank()) {
+            throw new IllegalArgumentException("Token value is required");
+        }
+        if (expiresAt == null) {
+            throw new IllegalArgumentException("Token expiry is required");
+        }
+
+        return new ProjectToken(null, projectId, tokenEncoded, null, expiresAt, Status.ACTIVE);
+    }
+
+    public ProjectToken withStatus(Status newStatus) {
+        if (newStatus == null) {
+            throw new IllegalArgumentException("Status is required");
+        }
+        return new ProjectToken(id, projectId, tokenEncoded, createdAt, expiresAt, newStatus);
+    }
+
     public ProjectToken() {
     }
 

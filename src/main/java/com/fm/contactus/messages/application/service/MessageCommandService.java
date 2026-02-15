@@ -17,8 +17,17 @@ public class MessageCommandService {
     }
 
     @Transactional
-    public Long createMessage(Long projectId, String name, String email, String message, String subject, String phone, String type) {
-        Message msg = Message.createNew(projectId, message, subject, name, email, phone, type);
+    public Long createMessage(
+        Long projectId,
+        String name,
+        String email,
+        String message,
+        String subject,
+        String phone,
+        String type,
+        String ipAddress
+    ) {
+        Message msg = Message.createNew(projectId, message, subject, name, email, phone, type, ipAddress);
         Message savedMessage = messageRepository.save(msg);
         return savedMessage.getId();
     }
