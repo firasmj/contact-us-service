@@ -35,9 +35,11 @@ Requests to `/api/tokens/**` require:
 
 ## Endpoints
 
-### `POST /api/messages`
+### Public API
 
-Creates a message under the token's project.
+#### `POST /api/messages`
+
+Creates a message under the token's project. Requires project token.
 
 Body:
 
@@ -61,47 +63,49 @@ curl -X POST http://localhost:8080/api/messages \
   -d '{"message":"Need pricing details","subject":"Pricing","name":"Jane Doe","email":"jane@example.com"}'
 ```
 
-### `GET /api/messages`
+### Admin API
 
-Returns messages for the token's project.
+#### `GET /api/admin/messages`
+
+Returns messages for a specific project. Requires admin key.
 
 Example:
 
 ```bash
-curl http://localhost:8080/api/messages \
-  -H "X-Project-Token: dev-token-123"
+curl "http://localhost:8080/api/admin/messages?projectId=1" \
+  -H "X-Admin-Key: your-admin-key"
 ```
 
-### `POST /api/tokens`
+#### `POST /api/tokens`
 
-Creates a token for a project.
+Creates a token for a project. Requires admin key.
 
 ```bash
 curl -X POST http://localhost:8080/api/tokens \
   -H "Content-Type: application/json" \
-  -H "X-Admin-Key: change-me-admin-key" \
+  -H "X-Admin-Key: your-admin-key" \
   -d '{"projectId":1,"expiresInDays":365}'
 ```
 
-### `POST /api/tokens/rotate`
+#### `POST /api/tokens/rotate`
 
-Revokes an existing token and issues a new one for the same project.
+Revokes an existing token and issues a new one for the same project. Requires admin key.
 
 ```bash
 curl -X POST http://localhost:8080/api/tokens/rotate \
   -H "Content-Type: application/json" \
-  -H "X-Admin-Key: change-me-admin-key" \
+  -H "X-Admin-Key: your-admin-key" \
   -d '{"tokenEncoded":"dev-token-123","expiresInDays":365}'
 ```
 
-### `POST /api/tokens/revoke`
+#### `POST /api/tokens/revoke`
 
-Revokes a token.
+Revokes a token. Requires admin key.
 
 ```bash
 curl -X POST http://localhost:8080/api/tokens/revoke \
   -H "Content-Type: application/json" \
-  -H "X-Admin-Key: change-me-admin-key" \
+  -H "X-Admin-Key: your-admin-key" \
   -d '{"tokenEncoded":"dev-token-123"}'
 ```
 
@@ -138,7 +142,7 @@ CORS allowed origins:
 
 Admin key (for token management endpoints):
 
-- `ADMIN_API_KEY`
+- `ADMIN_API_KEY` (required - generate with: `openssl rand -base64 32`)
 
 Abuse protection settings:
 

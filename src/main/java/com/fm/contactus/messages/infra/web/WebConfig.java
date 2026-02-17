@@ -26,7 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(adminKeyInterceptor)
-                .addPathPatterns("/api/tokens/**");
+                .addPathPatterns("/api/tokens/**", "/api/admin/**");
 
         registry.addInterceptor(tokenAuthInterceptor)
                 .addPathPatterns("/api/messages/**");
@@ -36,12 +36,17 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/messages/**")
                 .allowedOrigins(allowedOrigins.split(","))
-                .allowedMethods("GET", "POST", "OPTIONS")
+                .allowedMethods("POST", "OPTIONS")
                 .allowedHeaders("X-Project-Token", "Content-Type");
 
         registry.addMapping("/api/tokens/**")
                 .allowedOrigins(allowedOrigins.split(","))
                 .allowedMethods("POST", "OPTIONS")
+                .allowedHeaders("X-Admin-Key", "Content-Type");
+
+        registry.addMapping("/api/admin/**")
+                .allowedOrigins(allowedOrigins.split(","))
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("X-Admin-Key", "Content-Type");
     }
     
